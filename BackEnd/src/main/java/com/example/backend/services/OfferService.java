@@ -28,7 +28,7 @@ public class OfferService implements IOfferService {
 
     @Override
     public Offer updateOffer(Offer offer) {
-        return offerrepo.save(offer);;
+        return offerrepo.save(offer);
     }
 
     @Override
