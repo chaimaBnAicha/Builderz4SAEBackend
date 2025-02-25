@@ -12,5 +12,6 @@ public interface IOfferService {
     Offer updateOffer(Offer offer);
     List<Offer> allOffers();
     Offer findOfferById(int idOffer);
+
     
 }
