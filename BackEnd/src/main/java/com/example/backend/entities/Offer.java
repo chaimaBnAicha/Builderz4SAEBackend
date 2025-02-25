@@ -1,5 +1,6 @@
 package com.example.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +25,11 @@ public class Offer {
     Date End_Date;
     @Enumerated(EnumType.STRING)
     TypeOffer Typeoffer;
+    @Enumerated(EnumType.STRING)
+    OfferStatus Status;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    User user;
 }
