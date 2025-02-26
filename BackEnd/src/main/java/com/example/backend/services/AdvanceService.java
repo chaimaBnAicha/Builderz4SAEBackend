@@ -97,10 +97,10 @@ public class AdvanceService implements IAdvanceService {
             logger.info("Last Advance Dates for User " + userId + ": " + lastAdvanceDates);
             logger.info("Selected Last Advance Date: " + lastAdvanceDate);
 
-            if (lastAdvanceDate != null && isWithinSameMonth(lastAdvanceDate, new Date())) {
+           /* if (lastAdvanceDate != null && isWithinSameMonth(lastAdvanceDate, new Date())) {
                 return false; // Déjà une avance ce mois-ci
             }
-
+*/
             // Si tous les critères sont respectés, l'avance peut être approuvée
             return true;
         } catch (Exception e) {

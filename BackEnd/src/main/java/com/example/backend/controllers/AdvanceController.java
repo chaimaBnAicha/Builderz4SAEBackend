@@ -1,6 +1,7 @@
 package com.example.backend.controllers;
 
 import com.example.backend.entities.Advance;
+import com.example.backend.services.EmailService;
 import com.example.backend.services.IAdvanceService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,9 @@ import java.util.Map;
 @RequestMapping("/advance")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AdvanceController {
-    @Autowired
-    private JavaMailSender mailSender;
+
     IAdvanceService advanceService;
+    private final EmailService emailService;
     @GetMapping("/retrieve-all-advances")
     public List<Advance> getAdvances() {
         List<Advance> listAdvances = advanceService.allAdvances();
@@ -64,7 +65,8 @@ public class AdvanceController {
     public Advance updateAdvanceStatus(@PathVariable("id") int id, @RequestBody String status) {
         return advanceService.updateAdvanceStatus(id, status);
     }*/
-    @PostMapping("/notify-status")
+
+  /*  @PostMapping("/notify-status")
     public ResponseEntity<?> notifyUser(@RequestBody Map<String, Object> request) {
         try {
             int advanceId = (int) request.get("advanceId");
@@ -87,6 +89,12 @@ public class AdvanceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to send notification: " + e.getMessage());
         }
-    }
+    }*/
+
+  @PostMapping("/send")
+  public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String body) {
+      emailService.sendEmail(to, subject, body);
+      return "Email sent successfully!";
+  }
 
 }
