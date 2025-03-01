@@ -91,10 +91,21 @@ public class AdvanceController {
         }
     }*/
 
-  @PostMapping("/send")
-  public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String body) {
-      emailService.sendEmail(to, subject, body);
-      return "Email sent successfully!";
-  }
+    @PostMapping("/send")
+    public String sendEmail(
+            @RequestParam String to,
+            @RequestParam String subject,
+            @RequestParam String body,
+            @RequestParam(defaultValue = "false") boolean isHtml) {
+
+        if (isHtml) {
+            emailService.sendHtmlEmail(to, subject, body);
+        } else {
+            emailService.sendEmail(to, subject, body);
+        }
+
+        return "Email sent successfully!";
+    }
+
 
 }
