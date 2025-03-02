@@ -106,6 +106,20 @@ public class AdvanceController {
 
         return "Email sent successfully!";
     }
+    @GetMapping("/status")
+    public Map<String, Long> getAdvancesByStatus() {
+        return advanceService.getAdvancesByStatus();
+    }
+
+    @GetMapping("/monthly")
+    public Map<String, Long> getAdvancesByMonth() {
+        return advanceService.getAdvancesByMonth();
+    }
+
+    @GetMapping("/sinusoidal")
+    public List<Double> getSinusoidalData() {
+        return advanceService.getSinusoidalData();
+    }
 
 
 }

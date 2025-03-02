@@ -1,6 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.Advance;
+import com.example.backend.entities.AdvanceStatus;
 import com.example.backend.entities.User;
 import com.example.backend.repositories.AdvanceRepository;
 import com.example.backend.repositories.UserRepository;
@@ -9,9 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -54,72 +53,40 @@ public class AdvanceService implements IAdvanceService {
 
     @Override
 
-    @Transactional
     public boolean canApproveAdvance(int userId, int advanceId) {
-        Logger logger = Logger.getLogger(this.getClass().getName());
-        try {
-            User user = userRepository.findById(userId).orElse(null);
-            if (user == null) {
-                return false; // Utilisateur non trouvé
-            }
+        return advrepo.canApproveAdvance(userId, advanceId, MAX_ADVANCE_LIMIT);
+    }
 
-            Advance advance = advrepo.findById(advanceId).orElse(null);
-            if (advance == null) {
-                return false; // Demande d'avance non trouvée
-            }
-
-            // Vérification si l'avance appartient à l'utilisateur
-            if (advance.getUser().getId() != userId) {
-                return false; // L'avance n'appartient pas à l'utilisateur
-            }
-
-            // 1. Vérification du montant de l'avance
-            if (advance.getAmount_request() > MAX_ADVANCE_LIMIT) {
-                return false; // Montant dépasse la limite
-            }
-
-            // 2. Vérification du solde du salaire
-            if (user.getSalary() < advance.getAmount_request()) {
-                return false; // Salaire insuffisant
-            }
-
-            // 3. Vérification du nombre d'avances antérieures
-        /*
-        long advanceCount = advrepo.countByUserdAndStatus(userId, Status.ACCEPTED);
-        if (advanceCount >= 3) {
-            return false; // Trop d'avances approuvées
+    //statistics
+    public Map<String, Long> getAdvancesByStatus() {
+        List<Object[]> results = advrepo.countAdvancesByStatus();
+        Map<String, Long> map = new LinkedHashMap<>();
+        for (Object[] result : results) {
+            map.put(((AdvanceStatus) result[0]).name(), (Long) result[1]);
         }
-        */
+        return map;
+    }
 
-            // 4. Vérification de la date de la dernière avance
-            List<Date> lastAdvanceDates = advrepo.findLastAdvanceDatesByUserId(userId);
-            Date lastAdvanceDate = lastAdvanceDates.isEmpty() ? null : lastAdvanceDates.get(0);
-            logger.info("Last Advance Dates for User " + userId + ": " + lastAdvanceDates);
-            logger.info("Selected Last Advance Date: " + lastAdvanceDate);
-
-           /* if (lastAdvanceDate != null && isWithinSameMonth(lastAdvanceDate, new Date())) {
-                return false; // Déjà une avance ce mois-ci
-            }
-*/
-            // Si tous les critères sont respectés, l'avance peut être approuvée
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace(); // Log the error for debugging
-            return false; // En cas d'erreur imprévue, on retourne false
+    public Map<String, Long> getAdvancesByMonth() {
+        List<Object[]> results = advrepo.countAdvancesByMonth();
+        Map<String, Long> map = new LinkedHashMap<>();
+        for (Object[] result : results) {
+            map.put((String) result[0], (Long) result[1]);
         }
+        return map;
+    }
+
+    public List<Double> getSinusoidalData() {
+        List<Object[]> results = advrepo.findAdvancesForSinusoidal();
+        List<Double> amounts = new ArrayList<>();
+        for (Object[] result : results) {
+            amounts.add((Double) result[1]);
+        }
+        return amounts;
     }
 
 
-    private boolean isWithinSameMonth(Date date1, Date date2) {
-        // Compare the month and year of both dates
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(date1);
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(date2);
 
-        return cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
-    }
 
 
    /* @Override
