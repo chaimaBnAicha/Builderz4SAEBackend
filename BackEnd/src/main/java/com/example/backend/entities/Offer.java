@@ -28,8 +28,14 @@ public class Offer {
     @Enumerated(EnumType.STRING)
     OfferStatus Status;
 
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
-    User user;
+    User user;*/
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 }
