@@ -53,7 +53,7 @@ public class AdvanceRepositoryImpl implements AdvanceRepositoryCustom {
                     .getResultList();
 
             if (!lastAdvanceDates.isEmpty() && isWithinSameMonth(lastAdvanceDates.get(0), new Date())) {
-                return false; // Already an advance in the current month
+                return false;
             }
 
             return true;

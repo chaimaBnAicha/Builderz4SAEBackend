@@ -76,14 +76,19 @@ public class AdvanceService implements IAdvanceService {
         return map;
     }
 
-    public List<Double> getSinusoidalData() {
-        List<Object[]> results = advrepo.findAdvancesForSinusoidal();
-        List<Double> amounts = new ArrayList<>();
-        for (Object[] result : results) {
-            amounts.add((Double) result[1]);
+
+        public Map<String, Double> getSinusoidalData() {
+            List<Object[]> results = advrepo.findAdvancesForSinusoidal();
+            Map<String, Double> sinusoidalData = new LinkedHashMap<>();
+
+            for (Object[] result : results) {
+                String date = (String) result[0];
+                Double amount = ((Number) result[1]).doubleValue();
+                sinusoidalData.put(date, amount);
+            }
+            return sinusoidalData;
         }
-        return amounts;
-    }
+
 
 
 

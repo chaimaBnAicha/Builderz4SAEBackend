@@ -32,8 +32,10 @@ public interface AdvanceRepository extends JpaRepository<Advance, Integer>,  Adv
     @Query("SELECT MONTHNAME(a.requestDate), COUNT(a) FROM Advance a GROUP BY MONTH(a.requestDate)")
     List<Object[]> countAdvancesByMonth();
 
-    @Query("SELECT a.requestDate, a.amount_request FROM Advance a ORDER BY a.requestDate")
+    @Query("SELECT FUNCTION('DATE_FORMAT', a.requestDate, '%Y-%m-%d'), SUM(a.amount_request) " +
+            "FROM Advance a GROUP BY FUNCTION('DATE_FORMAT', a.requestDate, '%Y-%m-%d') ORDER BY a.requestDate")
     List<Object[]> findAdvancesForSinusoidal();
+
 
 
 

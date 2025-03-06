@@ -117,7 +117,7 @@ public class AdvanceController {
     }
 
     @GetMapping("/sinusoidal")
-    public List<Double> getSinusoidalData() {
+    public Map<String, Double> getSinusoidalData() {
         return advanceService.getSinusoidalData();
     }
 

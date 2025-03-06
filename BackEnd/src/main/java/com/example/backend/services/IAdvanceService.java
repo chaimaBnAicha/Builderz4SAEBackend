@@ -14,7 +14,8 @@ public interface IAdvanceService {
     List<Advance> getAllAdvancesByUser(int userId);
     boolean canApproveAdvance(int userId, int advanceId);
     //Advance updateAdvanceStatus(int id, String status);
-    List<Double> getSinusoidalData();
+    //List<Double> getSinusoidalData();
     Map<String, Long> getAdvancesByMonth();
     Map<String, Long> getAdvancesByStatus();
+    Map<String, Double> getSinusoidalData();
 }
