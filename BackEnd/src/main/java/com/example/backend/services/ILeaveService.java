@@ -9,4 +9,5 @@ public interface ILeaveService {
     void deleteLeave(int idLeave);
     Leave updateLeave(Leave leave);
     List<Leave> allLeaves();
+    Leave findLeaveById(int idLeave);
 }

@@ -32,4 +32,9 @@ public class LeaveService implements ILeaveService{
     public List<Leave> allLeaves() {
         return leaveRepository.findAll();
     }
+    @Override
+    public Leave findLeaveById(int idLeave) {
+        return leaveRepository.findById(idLeave).get();
+    }
+
 }

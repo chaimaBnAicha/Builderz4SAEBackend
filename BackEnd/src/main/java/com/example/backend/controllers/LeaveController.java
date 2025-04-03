@@ -38,5 +38,10 @@ public class LeaveController {
         Leave leave = leaveService.updateLeave(l);
         return leave;
     }
+    @GetMapping("/retrieve-leave/{leave-id}")
+    public Leave retrieveLeave(@PathVariable("leave-id") int Id) {
+        Leave leave = leaveService.findLeaveById(Id);
+        return leave;
+    }
 
 }
