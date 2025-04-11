@@ -27,6 +27,10 @@ public class Insurance {
     @Enumerated(EnumType.STRING)
     Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
 
 }

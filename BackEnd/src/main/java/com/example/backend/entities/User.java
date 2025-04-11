@@ -32,5 +32,9 @@ public class User {
     @JsonIgnore
     List<Offer> Offers;
 
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Insurance> Insurance;
+
 
 }
