@@ -3,6 +3,7 @@ package com.example.backend.services;
 import com.example.backend.entities.Offer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IOfferService {
 
@@ -13,5 +14,8 @@ public interface IOfferService {
     List<Offer> allOffers();
     Offer findOfferById(int idOffer);
 
+    Map<String, Long> getOffersByMonth();
+    Map<String, Long> getTypeOfferCount();
+    Map<String, Long> getOfferStatusCount();
     
 }

@@ -70,7 +70,7 @@ public class EmailService {
                 + "        <p style='font-size: 18px;'><strong>📅 Valid From:</strong> " + formattedStartDate + " to " + formattedEndDate + "</p>"
                 + "    </div>"
                 + "    <div style='text-align: center; margin-top: 20px;'>"
-                + "        <a href='http://localhost:4200/offers/" + offer.getId_offer() + "'"
+                + "        <a href='http://localhost:4200/#/app-view-offers" + offer.getId_offer() + "'"
                 + "           style='display: inline-block; padding: 12px 20px; background-color: #16A085; color: #fff; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);'>"
                 + "            🔗 View Offer"
                 + "        </a>"

@@ -6,10 +6,12 @@ import com.example.backend.repositories.UserRepository;
 import com.example.backend.services.EmailService;
 import com.example.backend.services.IOfferService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.backend.entities.User;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -73,7 +75,23 @@ UserRepository userRepository;
         Offer Offer = offerService.updateOffer(a);
         return Offer;
     }
-    
+
+
+
+    @GetMapping("/status-count")
+    public ResponseEntity<Map<String, Long>> getOfferStatusCount() {
+        return ResponseEntity.ok(offerService.getOfferStatusCount());
+    }
+
+    @GetMapping("/type-count")
+    public ResponseEntity<Map<String, Long>> getTypeOfferCount() {
+        return ResponseEntity.ok(offerService.getTypeOfferCount());
+    }
+
+    @GetMapping("/monthly-count")
+    public ResponseEntity<Map<String, Long>> getOffersByMonth() {
+        return ResponseEntity.ok(offerService.getOffersByMonth());
+    }
     
     
 }

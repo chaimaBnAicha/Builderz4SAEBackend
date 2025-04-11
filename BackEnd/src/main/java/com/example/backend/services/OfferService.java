@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -65,6 +67,37 @@ public class OfferService implements IOfferService {
             }
         }
     }
+
+
+    // Données pour le diagramme circulaire (Statut)
+    public Map<String, Long> getOfferStatusCount() {
+        return offerrepo.countOffersByStatus().stream()
+                .collect(Collectors.toMap(
+                        row -> row[0].toString(),
+                        row -> (Long) row[1]
+                ));
+    }
+
+    // Données pour le diagramme à barres (Type d'offre)
+    public Map<String, Long> getTypeOfferCount() {
+        return offerrepo.countOffersByType().stream()
+                .collect(Collectors.toMap(
+                        row -> row[0].toString(),
+                        row -> (Long) row[1]
+                ));
+    }
+
+    // Données pour le graphique sinusoïdal (Offres par mois)
+    public Map<String, Long> getOffersByMonth() {
+        return offerrepo.countOffersByMonth().stream()
+                .collect(Collectors.toMap(
+                        row -> "Mois " + row[0].toString(),
+                        row -> (Long) row[1]
+                ));
+    }
+
+
+
 
 
 }
