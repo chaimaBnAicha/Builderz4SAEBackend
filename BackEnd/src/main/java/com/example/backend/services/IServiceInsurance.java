@@ -1,8 +1,10 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.Insurance;
+import com.example.backend.entities.InsuranceStatus;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IServiceInsurance {
 
@@ -13,6 +15,7 @@ public interface IServiceInsurance {
     Insurance updateInsurance(Insurance insurance);
     List<Insurance> allInsurances();
     Insurance findInsuranceById(int idInsurance);
-    
+
+    Map<InsuranceStatus, Long> countInsurancesByStatus();
     
 }

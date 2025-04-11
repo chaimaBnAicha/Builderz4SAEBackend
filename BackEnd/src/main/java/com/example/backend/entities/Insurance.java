@@ -32,6 +32,13 @@ public class Insurance {
     private User user;
 
 
+    // 🧠 Statut dynamique : non stocké en base
+    @Transient
+    public InsuranceStatus getStatus() {
+        Date today = new Date();
+        return End_Date.before(today) ? InsuranceStatus.EXPIRED : InsuranceStatus.VALID;
+    }
+
 
 }
 

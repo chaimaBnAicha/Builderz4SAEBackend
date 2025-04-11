@@ -2,12 +2,14 @@ package com.example.backend.controllers;
 
 
 import com.example.backend.entities.Insurance;
+import com.example.backend.entities.InsuranceStatus;
 import com.example.backend.repositories.UserRepository;
 import com.example.backend.services.IServiceInsurance;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -52,10 +54,14 @@ public class InsuranceController {
         Insurance Insurance = InsuranceService.updateInsurance(a);
         return Insurance;
     }
-    
-    
-    
-    
+
+
+
+    // 📊 Endpoint pour compter les assurances par statut (VALID / EXPIRED)
+    @GetMapping("/status-count")
+    public Map<InsuranceStatus, Long> getInsuranceStatusCount() {
+        return InsuranceService.countInsurancesByStatus();
+    }
     
     
     
