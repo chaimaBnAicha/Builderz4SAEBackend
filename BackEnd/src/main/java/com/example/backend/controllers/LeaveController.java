@@ -2,10 +2,14 @@ package com.example.backend.controllers;
 
 
 import com.example.backend.entities.Leave;
+import com.example.backend.entities.LeaveStatus;
+import com.example.backend.entities.LeaveType;
 import com.example.backend.services.ILeaveService;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -44,6 +48,17 @@ public class LeaveController {
     public Leave retrieveLeave(@PathVariable("leave-id") int Id) {
         Leave leave = leaveService.findLeaveById(Id);
         return leave;
+    }
+    @GetMapping("/can-accept")
+    public boolean canAcceptLeave(
+            @RequestParam int userId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+            @RequestParam LeaveType type,
+            @RequestParam(required = false) String document,
+            @RequestParam LeaveStatus status
+    ) {
+        return leaveService.canAcceptLeave(userId, startDate, endDate, type, document, status);
     }
 
 }
