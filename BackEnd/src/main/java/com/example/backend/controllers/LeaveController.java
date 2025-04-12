@@ -4,6 +4,7 @@ package com.example.backend.controllers;
 import com.example.backend.entities.Leave;
 import com.example.backend.entities.LeaveStatus;
 import com.example.backend.entities.LeaveType;
+import com.example.backend.services.EmailService;
 import com.example.backend.services.ILeaveService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +23,8 @@ public class LeaveController {
 
 
     ILeaveService leaveService;
+    private final EmailService emailService;
+
     @GetMapping("/retrieve-all-leave")
     public List<Leave> getLeaves() {
         List<Leave> listLeaves = leaveService.allLeaves();
@@ -60,5 +63,21 @@ public class LeaveController {
     ) {
         return leaveService.canAcceptLeave(userId, startDate, endDate, type, document, status);
     }
+    @PostMapping("/send")
+    public String sendEmail(
+            @RequestParam String to,
+            @RequestParam String subject,
+            @RequestParam String body,
+            @RequestParam(defaultValue = "false") boolean isHtml) {
+
+        if (isHtml) {
+            emailService.sendHtmlEmail(to, subject, body);
+        } else {
+            emailService.sendEmail(to, subject, body);
+        }
+
+        return "Email sent successfully!";
+    }
+
 
 }
