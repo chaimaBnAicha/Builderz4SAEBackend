@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -77,6 +78,21 @@ public class LeaveController {
         }
 
         return "Email sent successfully!";
+    }
+
+    @GetMapping("/leave-count-by-type")
+    public Map<String, Long> getLeaveCountByType() {
+        return leaveService.getLeaveCountByType();
+    }
+
+    @GetMapping("/average-leave-duration")
+    public Map<String, Double> getAverageLeaveDurationPerType() {
+        return leaveService.getAverageLeaveDurationPerType();
+    }
+
+    @GetMapping("/leaves-by-month")
+    public Map<Integer, Long> getApprovedLeavesByMonth() {
+        return leaveService.getApprovedLeavesByMonth();
     }
 
 

@@ -8,7 +8,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 
@@ -60,6 +64,46 @@ public class LeaveService implements ILeaveService{
                 startDate,
                 endDate
         );
+    }
+
+
+   @Override
+    public Map<String, Long> getLeaveCountByType() {
+        List<Object[]> results = leaveRepository.getLeaveCountByType();
+        Map<String, Long> map = new LinkedHashMap<>();
+        for (Object[] row : results) {
+            // row[0] is the LeaveType enum, row[1] is the count
+            String type = ((LeaveType) row[0]).name();
+            Long count  = (Long) row[1];
+            map.put(type, count);
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, Double> getAverageLeaveDurationPerType() {
+        List<Object[]> results = leaveRepository.getAverageLeaveDurationPerType();
+        Map<String, Double> map = new LinkedHashMap<>();
+        for (Object[] row : results) {
+            // row[0] is the LeaveType enum, row[1] is the average (Number)
+            String type       = ((LeaveType) row[0]).name();
+            Double avgDuration = ((Number) row[1]).doubleValue();
+            map.put(type, avgDuration);
+        }
+        return map;
+    }
+
+    @Override
+    public Map<Integer, Long> getApprovedLeavesByMonth() {
+        List<Object[]> results = leaveRepository. getApprovedLeavesByMonth();
+        Map<Integer, Long> map = new LinkedHashMap<>();
+        for (Object[] row : results) {
+            // row[0] is the month (Integer), row[1] is the count
+            Integer month = (Integer) row[0];
+            Long    cnt   = (Long) row[1];
+            map.put(month, cnt);
+        }
+        return map;
     }
 
 

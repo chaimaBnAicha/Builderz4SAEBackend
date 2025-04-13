@@ -6,6 +6,7 @@ import com.example.backend.entities.LeaveType;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ILeaveService {
     Leave addLeave(Leave leave);
@@ -13,5 +14,15 @@ public interface ILeaveService {
     Leave updateLeave(Leave leave);
     List<Leave> allLeaves();
     Leave findLeaveById(int idLeave);
-    public boolean canAcceptLeave(int userId, Date startDate, Date endDate,
-                                  LeaveType type, String documentAttachment, LeaveStatus status);}
+     boolean canAcceptLeave(int userId, Date startDate, Date endDate,
+                                  LeaveType type, String documentAttachment, LeaveStatus status);
+    Map<Integer, Long> getApprovedLeavesByMonth();
+     Map<String, Long> getLeaveCountByType();
+    Map<String, Double> getAverageLeaveDurationPerType();
+
+
+
+
+}
+
+
