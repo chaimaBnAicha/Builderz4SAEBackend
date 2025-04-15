@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.entities.Category;
 import com.example.backend.entities.Insurance;
 import com.example.backend.entities.InsuranceStatus;
 
@@ -17,5 +18,10 @@ public interface IServiceInsurance {
     Insurance findInsuranceById(int idInsurance);
 
     Map<InsuranceStatus, Long> countInsurancesByStatus();
-    
+
+    Map<Category, Long> countInsurancesByCategory();
+
+    Map<Integer, Long> countInsurancesByMonth();
+
+
 }

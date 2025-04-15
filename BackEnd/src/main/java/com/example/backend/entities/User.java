@@ -28,6 +28,14 @@ public class User {
     double Salary;
     Date DateOfHire;
 
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     List<Offer> Offers;

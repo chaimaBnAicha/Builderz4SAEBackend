@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.entities.Category;
 import com.example.backend.entities.Insurance;
 import com.example.backend.entities.InsuranceStatus;
 import com.example.backend.repositories.InsuranceRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 @Service
@@ -57,6 +59,38 @@ public class InsuranceService implements IServiceInsurance{
         }
 
         return statusCount;
+    }
+
+
+
+
+
+    // ✅ Nombre d’assurances par catégorie
+    public Map<Category, Long> countInsurancesByCategory() {
+        List<Object[]> results = insurancerepo.countInsurancesByCategory();
+        Map<Category, Long> categoryCount = new EnumMap<>(Category.class);
+
+        for (Object[] row : results) {
+            Category category = (Category) row[0];
+            Long count = (Long) row[1];
+            categoryCount.put(category, count);
+        }
+
+        return categoryCount;
+    }
+
+    // ✅ Nombre d’assurances par mois de début
+    public Map<Integer, Long> countInsurancesByMonth() {
+        List<Object[]> results = insurancerepo.countInsurancesByMonth();
+        Map<Integer, Long> monthCount = new TreeMap<>(); // Trie automatiquement les mois
+
+        for (Object[] row : results) {
+            Integer month = (Integer) row[0];
+            Long count = (Long) row[1];
+            monthCount.put(month, count);
+        }
+
+        return monthCount;
     }
 
 

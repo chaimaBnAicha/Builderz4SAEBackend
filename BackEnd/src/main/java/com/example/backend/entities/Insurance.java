@@ -27,17 +27,20 @@ public class Insurance {
     @Enumerated(EnumType.STRING)
     Category category;
 
+  /*  @Enumerated(EnumType.STRING)
+   InsuranceStatus status;*/
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 
-    // 🧠 Statut dynamique : non stocké en base
     @Transient
     public InsuranceStatus getStatus() {
-        Date today = new Date();
-        return End_Date.before(today) ? InsuranceStatus.EXPIRED : InsuranceStatus.VALID;
+        return (End_Date != null && End_Date.before(new Date())) ? InsuranceStatus.EXPIRED : InsuranceStatus.VALID;
     }
+
+
 
 
 }

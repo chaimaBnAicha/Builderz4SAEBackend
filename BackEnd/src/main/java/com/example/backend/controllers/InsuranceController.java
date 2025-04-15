@@ -1,11 +1,12 @@
 package com.example.backend.controllers;
 
 
-import com.example.backend.entities.Insurance;
-import com.example.backend.entities.InsuranceStatus;
+import com.example.backend.entities.*;
 import com.example.backend.repositories.UserRepository;
+import com.example.backend.services.EmailService;
 import com.example.backend.services.IServiceInsurance;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class InsuranceController {
 
 
    IServiceInsurance InsuranceService;
-    
+    EmailService emailService;
     UserRepository userRepository;
     @GetMapping("/retrieve-all-Insurances")
     public List<Insurance> getInsurances() {
@@ -38,12 +39,43 @@ public class InsuranceController {
     }
 
 
-    @PostMapping("/add-Insurance")
+  /*  @PostMapping("/add-Insurance")
     public Insurance addInsurance(@RequestBody Insurance a) {
         Insurance Insurance = InsuranceService.addInsurance(a);
-        return Insurance;
-    }
 
+        Insurance savedInsurance = InsuranceService.addInsurance(a);
+        try {
+            String userEmail = savedInsurance.getUser().getEmail();
+            emailService.sendInsuranceNotification(userEmail, savedInsurance);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'envoi de l'email : " + e.getMessage());
+        }
+        return Insurance;
+    }*/
+
+
+    @PostMapping("/add-Insurance")
+    public Insurance addInsurance(@RequestBody Insurance a) {
+        Insurance savedInsurance = InsuranceService.addInsurance(a);
+        int userId = (a.getUser() != null && a.getUser().getId() != 0) ? a.getUser().getId() : 1;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + userId));
+
+
+        try {
+            if (user.getEmail() == null) {
+                System.err.println("L'email de l'utilisateur est null");
+            } else {
+                String userEmail = user.getEmail();
+                System.out.println("Email à envoyer : " + userEmail);
+                emailService.sendInsuranceNotification(userEmail, savedInsurance);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'envoi de l'email : " + e.getMessage());
+        }
+
+        return savedInsurance;
+    }
 
     @DeleteMapping("/remove-Insurance/{Insurance-id}")
     public void removeInsurance(@PathVariable("Insurance-id") int Id) {
@@ -58,12 +90,33 @@ public class InsuranceController {
 
 
     // 📊 Endpoint pour compter les assurances par statut (VALID / EXPIRED)
+   /* @GetMapping("/status-count")
+    public Map<InsuranceStatus, Long> getInsuranceStatusCount() {
+        return InsuranceService.countInsurancesByStatus();
+    }*/
+
     @GetMapping("/status-count")
     public Map<InsuranceStatus, Long> getInsuranceStatusCount() {
         return InsuranceService.countInsurancesByStatus();
     }
+
+
+    // 📊 Catégorie (RCPro, TRC...)
+    @GetMapping("/category-count")
+    public Map<Category, Long> countInsurancesByCategory() {
+        return InsuranceService.countInsurancesByCategory();
+    }
+
+
+    // 📈 Mois de début (1 à 12)
+    @GetMapping("/monthly-count")
+    public Map<Integer, Long> getInsuranceMonthlyCount() {
+        return InsuranceService.countInsurancesByMonth();
+    }
     
-    
-    
-    
+     /* @GetMapping("/category-count")
+    public ResponseEntity<Map<Category, Long>> countInsurancesByCategory() {
+        return ResponseEntity.ok(InsuranceService.countInsurancesByCategory());
+    }*/
+
 }
