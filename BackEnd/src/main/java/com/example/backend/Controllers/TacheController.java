@@ -236,15 +236,4 @@ public class TacheController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
-    @GetMapping("/taches/search")
-    public ResponseEntity<List<Tache>> searchTaches(@RequestParam String query) {
-        try {
-            List<Tache> results = tacheRepository.searchAllAttributes(query);
-            return ResponseEntity.ok(results);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 }
