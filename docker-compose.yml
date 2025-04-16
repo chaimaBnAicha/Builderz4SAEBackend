@@ -1,0 +1,68 @@
+
+
+services:
+  eureka-server:
+    image: oumaymahasnaoui/eureka-server:latest
+    container_name: eureka-server-instance
+    ports:
+      - "8762:8761"    # Changed external port to avoid conflict
+    environment:
+      - EUREKA_CLIENT_REGISTERWITHEUREKA=false
+      - EUREKA_CLIENT_FETCHREGISTRY=false
+      - EUREKA_INSTANCE_HOSTNAME=eureka-server-instance
+      - SERVER_PORT=8761
+    networks:
+      - spring-cloud
+  api-gateway:
+    image: oumaymahasnaoui/api-gateway:latest
+    container_name: api-gateway-instance
+    depends_on:
+      - eureka-server
+    ports:
+      - "8093:8093"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server-instance:8761/eureka/
+      - EUREKA_INSTANCE_HOSTNAME=api-gateway-instance
+      - SERVER_PORT=8093
+    networks:
+      - spring-cloud
+  backend:
+    image: oumaymahasnaoui/backend:latest
+    container_name: backend-instance
+    depends_on:
+      - eureka-server
+      - mysql
+    ports:
+
+        - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-instance:3306/Tache_EtapeDb?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server-instance:8761/eureka/
+      - EUREKA_INSTANCE_HOSTNAME=backend-instance
+   
+    networks:
+      - spring-cloud
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-instance
+    ports:
+      - "3306:3306"    # Changed external port to avoid conflict
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=Tache_EtapeDb
+      
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - spring-cloud
+ 
+
+networks:
+  spring-cloud:
+    driver: bridge
+
+volumes:
+  mysql-data:
