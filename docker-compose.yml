@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  mysql:
+    image: "mysql:5.6"
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=backendDB
+    restart: unless-stopped
+    networks:
+      - microservices-network
+
+  eureka:
+    build: ./EurekaPi
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-network
+
+  backend:
+    build: ./BackEnd
+    image: backendms
+    container_name: backendservice
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+      - mysql
+    restart: on-failure
+    networks:
+      - microservices-network
+
+  api-gateway:
+    build: ./ApiGateWay
+    image: apigatewayms
+    container_name: apiGateway
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+      - backend
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
